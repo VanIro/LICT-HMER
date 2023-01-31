@@ -35,45 +35,47 @@ import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices'
 import MathType from '@wiris/mathtype-ckeditor5/src/plugin';
 import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config';
 
+import Drawpad from './drawpad_plugin/drawpad'
+
 // import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 // import Image from '@ckeditor/ckeditor5-image/src/image';
 // import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
-import Button from '@ckeditor/ckeditor5-ui/src/button/button';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 
-const DrawPadCommand = ( editor ) => {
-    const model = editor.model;
-    const doc = model.document;
+// const DrawPadCommand = ( editor ) => {
+//     const model = editor.model;
+//     const doc = model.document;
 
-    const drawPad = model.createElement( 'drawPad' );
-    model.insertContent( drawPad, doc.selection );
+//     const drawPad = model.createElement( 'drawPad' );
+//     model.insertContent( drawPad, doc.selection );
 
-    toWidget( drawPad, editor );
-    model.setSelection( drawPad, 'on' );
-};
+//     toWidget( drawPad, editor );
+//     model.setSelection( drawPad, 'on' );
+// };
 
-const DrawPadView = ( editor ) => {
-    const canvas = document.createElement( 'canvas' );
-    canvas.setAttribute( 'width', '400' );
-    canvas.setAttribute( 'height', '400' );
-    canvas.setAttribute( 'style', 'border: 1px solid #ddd' );
+// const DrawPadView = ( editor ) => {
+//     const canvas = document.createElement( 'canvas' );
+//     canvas.setAttribute( 'width', '400' );
+//     canvas.setAttribute( 'height', '400' );
+//     canvas.setAttribute( 'style', 'border: 1px solid #ddd' );
 
-    const ctx = canvas.getContext( '2d' );
-    ctx.fillStyle = '#fff';
-    ctx.fillRect( 0, 0, 400, 400 );
+//     const ctx = canvas.getContext( '2d' );
+//     ctx.fillStyle = '#fff';
+//     ctx.fillRect( 0, 0, 400, 400 );
 
-    canvas.addEventListener( 'mousedown', ( e ) => {
-        ctx.beginPath();
-        ctx.moveTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
-    } );
+//     canvas.addEventListener( 'mousedown', ( e ) => {
+//         ctx.beginPath();
+//         ctx.moveTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
+//     } );
 
-    canvas.addEventListener( 'mouseup', ( e ) => {
-        ctx.lineTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
-        ctx.stroke();
-    } );
+//     canvas.addEventListener( 'mouseup', ( e ) => {
+//         ctx.lineTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
+//         ctx.stroke();
+//     } );
 
-    return canvas;
-};
+//     return canvas;
+// };
 
 
 ClassicEditor
@@ -83,12 +85,15 @@ ClassicEditor
 			EasyImage,
 			ImageUpload,
 			CloudServices,
-			MathType
+			MathType,
+			Drawpad
 		],
 		toolbar: {
 			items: [
 				'heading',
-				'|',
+				// '|',
+				// 'drawpad',
+				// '|',
 				'bold',
 				'italic',
 				'bulletedList',
@@ -99,9 +104,6 @@ ClassicEditor
 				'|',
 				'MathType',
 				'ChemType',
-				'|',
-                ,'drawPad',
-                '|',
 				'blockQuote',
 				'link',
 				'mediaEmbed',
@@ -126,39 +128,47 @@ ClassicEditor
 		},
 		cloudServices: CS_CONFIG
 	} )
-    .then( ( editor ) => {
-        editor.ui.componentFactory.add( 'drawPad', ( locale ) => {
-            const button = new Button( locale );
+    // .then( ( editor ) => {
+    //     editor.ui.componentFactory.add( 'drawPad', ( ) => {
+    //         const button = new ButtonView( );
 
-            button.set( {
-                label: 'Draw',
-                command: 'drawPad'
-            } );
+    //         // button.set( {
+    //         //     label: 'Draw',
+    //         //     command: 'drawPad'
+    //         // } );
+			
+    //         button.label = 'drawpad';
+    //         button.tooltip = true;
+    //         button.withText = true;
 
-            button.on( 'execute', () => {
-                DrawPadCommand( editor );
-            } );
+	// 		this.listenTo( button, 'execute', () => {
+    //             DrawPadCommand( editor );				
+    //         } );
 
-            return button;
-        } );
+    //         // button.on( 'execute', () => {
+    //         //     DrawPadCommand( editor );
+    //         // } );
 
-        editor.ui.add( 'drawPad', {
-            view: DrawPadView,
-            position: 'top'
-        } );
-        editor.ui.toolbar.addItems( [ 'drawPad' ] );
-    } )
+    //         return button;
+    //     } );
 
-	.then( editor => {
-		window.editor = editor;
+    //     editor.ui.add( 'drawPad', {
+    //         view: DrawPadView,
+    //         position: 'top'
+    //     } );
+    //     editor.ui.toolbar.addItems( [ 'drawPad' ] );
+    // } )
 
-		window.attachTourBalloon( {
-			target: window.findToolbarItem( editor.ui.view.toolbar,
-				item => item.label && item.label === 'Insert a math equation - MathType' ),
-			text: 'Click to insert mathematical or chemical formulas.',
-			editor
-		} );
-	} )
-	.catch( err => {
-		console.error( err.stack );
-	} );
+	// .then( editor => {
+	// 	window.editor = editor;
+
+	// 	window.attachTourBalloon( {
+	// 		target: window.findToolbarItem( editor.ui.view.toolbar,
+	// 			item => item.label && item.label === 'Insert a math equation - MathType' ),
+	// 		text: 'Click to insert mathematical or chemical formulas.',
+	// 		editor
+	// 	} );
+	// } )
+	// .catch( err => {
+	// 	console.error( err.stack );
+	// } );
