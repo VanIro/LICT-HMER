@@ -23,7 +23,7 @@ module.exports = {
                 use: [ 'raw-loader' ]
             },
             {
-                test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+                test: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,/^\.css$/],
 
                 use: [
                     {
@@ -50,7 +50,7 @@ module.exports = {
                 ]
             },
             {
-                test: /mathtype-html-integration-devkit[/\\]styles[/\\].+\.css$/,
+                test: [/mathtype-html-integration-devkit[/\\]styles[/\\].+\.css$/,/drawpad_plugin[/\\].+\.css$/,/abbreviation[/\\].+\.css$/],
 
                 use: [
                     "css-loader" 

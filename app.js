@@ -91,9 +91,9 @@ ClassicEditor
 		toolbar: {
 			items: [
 				'heading',
-				// '|',
-				// 'drawpad',
-				// '|',
+				'|',
+				'drawpad',
+				'|',
 				'bold',
 				'italic',
 				'bulletedList',
