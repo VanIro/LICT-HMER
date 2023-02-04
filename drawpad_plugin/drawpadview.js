@@ -6,12 +6,15 @@ import {
     submitHandler			
     } from '@ckeditor/ckeditor5-ui';
 
+import { KeystrokeHandler } from '@ckeditor/ckeditor5-utils';
+
 import { icons } from '@ckeditor/ckeditor5-core';
 
 export default class CanvasView extends View {
     constructor( locale ) {
         super( locale );
         
+        this.keystrokes = new KeystrokeHandler();
         
         this.strInputView = this._createInput( 'Add text' );
         
@@ -52,6 +55,8 @@ export default class CanvasView extends View {
         submitHandler( {
             view: this
         } );
+
+        this.keystrokes.listenTo(this.element);
     }
     focus() {
         this.childViews.first.focus();

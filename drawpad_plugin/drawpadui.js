@@ -61,6 +61,11 @@ export default class DrawpadUI extends Plugin {
             callback: () => this._hideUI()
         } );
 
+        canvasView.keystrokes.set('Esc',(data,cancel)=>{
+            this._hideUI();
+            cancel();
+        })
+
         return canvasView;
     }
 
