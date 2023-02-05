@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="test_js/paper-full.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <math-field>$$\frac{\pi}{2}$$</math-field>
+    <div class="canvas-container">
+
+    </div>
+    <canvas id="canvas" resize></canvas>
+    <script type="text/paperscript" canvas="canvas">
+        var myPath;
+
+        function onMouseDown(event) {
+            myPath = new Path();
+            myPath.strokeColor = 'black';
+            myPath.strokeWidth =5;
+        }
+        
+        function onMouseDrag(event) {
+            console.log(event.point);
+            point=
+            myPath.add(event.point);
+        }
+
+ </script>
+    <!-- <script>
+        window.addEventListener('DOMContentLoaded', 
+          () => MathLive.renderMathInDocument()
+        );
+      </script> -->
+</body>
+</html>

@@ -3,7 +3,8 @@ import {
     LabeledFieldView,				
     createLabeledInputText,
     ButtonView,
-    submitHandler			
+    submitHandler,
+    Template,			
     } from '@ckeditor/ckeditor5-ui';
 
 import { KeystrokeHandler } from '@ckeditor/ckeditor5-utils';
@@ -32,11 +33,11 @@ export default class CanvasView extends View {
         );
         // Delegate ButtonView#execute to FormView#cancel.
         this.cancelButtonView.delegate( 'execute' ).to( this, 'cancel' );
-
+        
         this.childViews = this.createCollection( [
             this.strInputView,
             this.saveButtonView,
-            this.cancelButtonView
+            this.cancelButtonView,
         ] );
         this.setTemplate( {
             tag: 'form',
@@ -44,8 +45,39 @@ export default class CanvasView extends View {
                 class: [ 'ck', 'ck-abbr-form' ],
                 tabindex: '-1'
             },
-            children:this.childViews,
+            children:[
+                this.getHTML_Canvas(),
+                ...this.childViews,
+                get_test_element()
+            ],
         } );
+    }
+    getHTML_Canvas(){
+        const canvas = document.createElement( 'canvas' );
+        canvas.setAttribute( 'width', '400' );
+        canvas.setAttribute( 'height', '400' );
+        canvas.setAttribute( 'style', 'border: 1px solid #ddd' );
+
+        const ctx = canvas.getContext( '2d' );
+        ctx.fillStyle = '#fff';
+        ctx.fillRect( 0, 0, 400, 400 );
+
+        canvas.addEventListener( 'mousedown', ( e ) => {
+            ctx.beginPath();
+            ctx.moveTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
+        } );
+
+        canvas.addEventListener( 'mouseup', ( e ) => {
+            ctx.lineTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
+            ctx.stroke();
+        } );
+
+        return canvas;
+    }
+    get_test_element(){
+        const button = document.createElement( 'button' );
+        button.onclick=()=>console.log("Clicked")
+        return button;
     }
     render() {
         super.render();
