@@ -1,67 +1,67 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import {ContextualBalloon,clickOutsideHandler} from '@ckeditor/ckeditor5-ui';		
+import { ContextualBalloon, clickOutsideHandler } from '@ckeditor/ckeditor5-ui';
 import CanvasView from './drawpadview';
 import './styles.css'
 
 export default class DrawpadUI extends Plugin {
 
     static get requires() {
-        return [ ContextualBalloon ];
+        return [ContextualBalloon];
     }
 
     init() {
         const editor = this.editor;
 
-        this._balloon = this.editor.plugins.get( ContextualBalloon );
+        this._balloon = this.editor.plugins.get(ContextualBalloon);
         this.canvasView = this._createCanvasView();
-        
-        editor.ui.componentFactory.add( 'drawpad', () => {
+
+        editor.ui.componentFactory.add('drawpad', () => {
             const button = new ButtonView();
             button.label = 'drawpad';
             button.tooltip = true;
             button.withText = true;
-            this.listenTo( button, 'execute', () => {
+            this.listenTo(button, 'execute', () => {
                 this._showUI();
-            } );
+            });
 
             return button;
-        } );
+        });
 
     }
 
     _createCanvasView() {
         const editor = this.editor;
-        const canvasView = new CanvasView( editor.locale );
-        this.listenTo(canvasView,'submit',()=>{
-            
+        const canvasView = new CanvasView(editor.locale);
+        this.listenTo(canvasView, 'submit', () => {
+
             const selection = editor.model.document.selection;
             const text = this.canvasView.strInputView.fieldView.element.value;
 
             // Change the model to insert the abbreviation.
-            editor.model.change( writer => {
+            editor.model.change(writer => {
                 editor.model.insertContent(
                     // Create a text node with the abbreviation attribute.
-                    writer.createText( text )
+                    writer.createText(text)
                 );
-            } );
+            });
 
             this._hideUI();
         })
-        this.listenTo(canvasView,'cancel',()=>{
+        this.listenTo(canvasView, 'cancel', () => {
 
             this._hideUI();
         })
 
         // Hide the form view when clicking outside the balloon.
-        clickOutsideHandler( {
+        clickOutsideHandler({
             emitter: canvasView,
             activator: () => this._balloon.visibleView === canvasView,
-            contextElements: [ this._balloon.view.element ],
+            contextElements: [this._balloon.view.element],
             callback: () => this._hideUI()
-        } );
+        });
 
-        canvasView.keystrokes.set('Esc',(data,cancel)=>{
+        canvasView.keystrokes.set('Esc', (data, cancel) => {
             this._hideUI();
             cancel();
         })
@@ -84,27 +84,27 @@ export default class DrawpadUI extends Plugin {
         };
     }
     _showUI() {
-        if (this._balloon.visibleView === this.canvasView){
+        if (this._balloon.visibleView === this.canvasView) {
             this._hideUI();
         }
-        else{
-            this._balloon.add( {
+        else {
+            this._balloon.add({
                 view: this.canvasView,
                 position: this._getBalloonPositionData()
-            } );
+            });
             this.canvasView.focus();
         }
     }
-    _hideUI(){
-        
-		// Clear the input field values and reset the form.
-		this.canvasView.strInputView.fieldView.value = '';
-		this.canvasView.element.reset();
+    _hideUI() {
 
-		this._balloon.remove( this.canvasView );
+        // Clear the input field values and reset the form.
+        this.canvasView.strInputView.fieldView.value = '';
+        this.canvasView.element.reset();
 
-		// Focus the editing view after inserting the drawpad so the user can start typing the content
-		// right away and keep the editor focused.
-		this.editor.editing.view.focus();
+        this._balloon.remove(this.canvasView);
+
+        // Focus the editing view after inserting the drawpad so the user can start typing the content
+        // right away and keep the editor focused.
+        this.editor.editing.view.focus();
     }
 }

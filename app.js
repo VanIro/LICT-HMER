@@ -28,12 +28,12 @@
 /* globals window, document, console */
 
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-// import ArticlePluginSet from '@ckeditor/ckeditor5-core/tests/_utils/articlepluginset';
+import ArticlePluginSet from '@ckeditor/ckeditor5-core/tests/_utils/articlepluginset';
 import EasyImage from '@ckeditor/ckeditor5-easy-image/src/easyimage';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
-// import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices';
+import CloudServices from '@ckeditor/ckeditor5-cloud-services/src/cloudservices';
 import MathType from '@wiris/mathtype-ckeditor5/src/plugin';
-// import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config';
+import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config';
 
 import Drawpad from './drawpad_plugin/drawpad'
 
@@ -85,7 +85,7 @@ ClassicEditor
 			ArticlePluginSet,
 			EasyImage,
 			ImageUpload,
-			// CloudServices,
+			CloudServices,
 			MathType,
 			Drawpad
 		],
@@ -127,7 +127,7 @@ ClassicEditor
 		table: {
 			contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
 		},
-		// cloudServices: CS_CONFIG
+		cloudServices: CS_CONFIG
 	})
 	// .then((editor)=>{
 	// 	console.log("jhilimilli");

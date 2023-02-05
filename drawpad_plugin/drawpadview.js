@@ -47,8 +47,7 @@ export default class CanvasView extends View {
             },
             children: [
                 this.getHTML_Canvas(),
-                ...this.childViews,
-                get_test_element()
+                ...this.childViews
             ],
         });
     }
@@ -63,30 +62,12 @@ export default class CanvasView extends View {
         const canvasOffsetX = canvas.offsetLeft;
         const canvasOffsetY = canvas.offsetTop;
 
-        canvas.width = window.innerWidth - canvasOffsetX;
-        canvas.height = window.innerHeight - canvasOffsetY;
+        console.log("Canvas offset: (", canvasOffsetX, ", ", canvasOffsetY, ")\n");
 
         let isPainting = false;
         let lineWidth = 5;
         let startX;
         let startY;
-
-        // toolbar.addEventListener('click', e => {
-        //     // if (e.target.id === 'clear') {
-        //     //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //     // }
-        // });
-
-        // toolbar.addEventListener('change', e => {
-        //     if (e.target.id === 'stroke') {
-        //         ctx.strokeStyle = e.target.value;
-        //     }
-
-        //     if (e.target.id === 'lineWidth') {
-        //         lineWidth = e.target.value;
-        //     }
-
-        // });
 
         const draw = (e) => {
             if (!isPainting) {
@@ -96,7 +77,8 @@ export default class CanvasView extends View {
             ctx.lineWidth = lineWidth;
             ctx.lineCap = 'round';
 
-            ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+            ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
+
             ctx.stroke();
         }
 
