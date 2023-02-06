@@ -35,33 +35,37 @@ export default class DrawpadUI extends Plugin {
         const canvasView = new CanvasView(editor.locale);
         this.listenTo(canvasView, 'submit', () => {
 
-        //sending a request
-        let request = new XMLHttpRequest();
-        const url = ``; //url
+            var canvas_elm = document.getElementById('canvas-drawing_pad')
+            var image_64 = canvas_elm.toDataURL().split('base64,')[1];
+            // console.log(image_64)
 
-        request.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-            const response = JSON.parse(this.responseText);
-            console.log("response aayo ta",this.responseText);
-            // getElements(response);
-        }
-        };
+            var data = {
+                img_file:image_64
+            }
+            //sending a request
 
-        request.open("POST", url, true);
-        request.send();
+            const response = fetch('http://127.0.0.1:8000/process-image',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                body: JSON.stringify(data)
 
-            const selection = editor.model.document.selection;
-            const text = this.canvasView.strInputView.fieldView.element.value;
+            })
 
-            // Change the model to insert the abbreviation.
-            editor.model.change(writer => {
-                editor.model.insertContent(
-                    // Create a text node with the abbreviation attribute.
-                    writer.createText(text)
-                );
-            });
+                const selection = editor.model.document.selection;
+                const text = this.canvasView.strInputView.fieldView.element.value;
 
-            this._hideUI();
+                // Change the model to insert the abbreviation.
+                editor.model.change(writer => {
+                    editor.model.insertContent(
+                        // Create a text node with the abbreviation attribute.
+                        writer.createText(text)
+                    );
+                });
+
+                this._hideUI();
         })
         this.listenTo(canvasView, 'cancel', () => {
 
