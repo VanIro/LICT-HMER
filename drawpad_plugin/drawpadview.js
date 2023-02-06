@@ -74,7 +74,7 @@ export default class CanvasView extends View {
             ctx.lineWidth = lineWidth;
             ctx.lineCap = 'round';
             var canvas_elm = document.getElementById('canvas-drawing_pad')
-            console.log(e.clientX,e.clientY);
+            
             const canvasOffsetX = canvas_elm.offsetLeft;
             const canvasOffsetY = canvas_elm.offsetTop;
             console.log(canvasOffsetX,canvasOffsetY);
