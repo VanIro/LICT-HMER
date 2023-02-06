@@ -3,7 +3,6 @@ import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
 import { ContextualBalloon, clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
 import CanvasView from "./drawpadview";
 import "./styles.css";
-import axios from "axios";
 
 export default class DrawpadUI extends Plugin {
   static get requires() {
