@@ -60,10 +60,6 @@ export default class CanvasView extends View {
 
         const ctx = canvas.getContext('2d');
 
-        const canvasOffsetX = canvas.offsetLeft;
-        const canvasOffsetY = canvas.offsetTop;
-
-        console.log("Canvas offset: (", canvasOffsetX, ", ", canvasOffsetY, ")\n");
 
         let isPainting = false;
         let lineWidth = 5;
@@ -77,10 +73,10 @@ export default class CanvasView extends View {
 
             ctx.lineWidth = lineWidth;
             ctx.lineCap = 'round';
-            canvas = document.getElementById('canvas-drawing_pad')
+            var canvas_elm = document.getElementById('canvas-drawing_pad')
             console.log(e.clientX,e.clientY);
-            const canvasOffsetX = canvas.offsetLeft;
-            const canvasOffsetY = canvas.offsetTop;
+            const canvasOffsetX = canvas_elm.offsetLeft;
+            const canvasOffsetY = canvas_elm.offsetTop;
             console.log(canvasOffsetX,canvasOffsetY);
 
             ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
