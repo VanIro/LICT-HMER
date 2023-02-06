@@ -44,43 +44,43 @@ import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 // import { resolve } from 'path';
 
-const DrawPadCommand = ( editor ) => {
-    const model = editor.model;
-    const doc = model.document;
+const DrawPadCommand = (editor) => {
+	const model = editor.model;
+	const doc = model.document;
 
-    const drawPad = model.createElement( 'drawPad' );
-    model.insertContent( drawPad, doc.selection );
+	const drawPad = model.createElement('drawPad');
+	model.insertContent(drawPad, doc.selection);
 
-    toWidget( drawPad, editor );
-    model.setSelection( drawPad, 'on' );
+	toWidget(drawPad, editor);
+	model.setSelection(drawPad, 'on');
 };
 
-const DrawPadView = ( editor ) => {
-    const canvas = document.createElement( 'canvas' );
-    canvas.setAttribute( 'width', '400' );
-    canvas.setAttribute( 'height', '400' );
-    canvas.setAttribute( 'style', 'border: 1px solid #ddd' );
+const DrawPadView = (editor) => {
+	const canvas = document.createElement('canvas');
+	canvas.setAttribute('width', '400');
+	canvas.setAttribute('height', '400');
+	canvas.setAttribute('style', 'border: 1px solid #ddd');
 
-    const ctx = canvas.getContext( '2d' );
-    ctx.fillStyle = '#fff';
-    ctx.fillRect( 0, 0, 400, 400 );
+	const ctx = canvas.getContext('2d');
+	ctx.fillStyle = '#fff';
+	ctx.fillRect(0, 0, 400, 400);
 
-    canvas.addEventListener( 'mousedown', ( e ) => {
-        ctx.beginPath();
-        ctx.moveTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
-    } );
+	canvas.addEventListener('mousedown', (e) => {
+		ctx.beginPath();
+		ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+	});
 
-    canvas.addEventListener( 'mouseup', ( e ) => {
-        ctx.lineTo( e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop );
-        ctx.stroke();
-    } );
+	canvas.addEventListener('mouseup', (e) => {
+		ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+		ctx.stroke();
+	});
 
-    return canvas;
+	return canvas;
 };
 
 
 ClassicEditor
-	.create( document.querySelector( '#mathtype-editor' ), {
+	.create(document.querySelector('#mathtype-editor'), {
 		plugins: [
 			ArticlePluginSet,
 			EasyImage,
@@ -125,46 +125,46 @@ ClassicEditor
 			]
 		},
 		table: {
-			contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+			contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
 		},
 		cloudServices: CS_CONFIG
-	} )
+	})
 	// .then((editor)=>{
 	// 	console.log("jhilimilli");
 	// 	return editor;
 	// })
-    // .then( ( editor ) => {
+	// .then( ( editor ) => {
 	// 	console.log(editor);
-    //     editor.ui.componentFactory.add( 'drawPad', ( ) => {
-    //         const button = new ButtonView( );
+	//     editor.ui.componentFactory.add( 'drawPad', ( ) => {
+	//         const button = new ButtonView( );
 
-    //         // button.set( {
-    //         //     label: 'Draw',
-    //         //     command: 'drawPad'
-    //         // } );
-			
-    //         button.label = 'drawpad2';
-    //         button.tooltip = true;
-    //         button.withText = true;
+	//         // button.set( {
+	//         //     label: 'Draw',
+	//         //     command: 'drawPad'
+	//         // } );
+
+	//         button.label = 'drawpad2';
+	//         button.tooltip = true;
+	//         button.withText = true;
 
 	// 		// this.listenTo( button, 'execute', () => {
-    //         //     DrawPadCommand( editor );				
-    //         // } );
+	//         //     DrawPadCommand( editor );				
+	//         // } );
 
-    //         button.on( 'execute', () => {
-    //             DrawPadCommand( editor );
-    //         } );
+	//         button.on( 'execute', () => {
+	//             DrawPadCommand( editor );
+	//         } );
 
-    //         return button;
-    //     } );
+	//         return button;
+	//     } );
 
-    //     // editor.ui.add( 'drawPad', {
-    //     //     view: DrawPadView,
-    //     //     position: 'top'
-    //     // } );
+	//     // editor.ui.add( 'drawPad', {
+	//     //     view: DrawPadView,
+	//     //     position: 'top'
+	//     // } );
 
-    //     editor.ui.addToolbar( DrawPadView );
-    // } )
+	//     editor.ui.addToolbar( DrawPadView );
+	// } )
 
 	// .then( editor => {
 	// 	window.editor = editor;
@@ -176,6 +176,6 @@ ClassicEditor
 	// 		editor
 	// 	} );
 	// } )
-	.catch( err => {
-		console.error( err.stack );
-	} );
+	.catch(err => {
+		console.error(err.stack);
+	});
