@@ -43,7 +43,8 @@ export default class CanvasView extends View {
             tag: 'form',
             attributes: {
                 class: ['ck', 'ck-abbr-form'],
-                tabindex: '-1'
+                tabindex: '-1',
+                'text-align':'center',
             },
             children: [
                 this.getHTML_Canvas(),
@@ -55,8 +56,9 @@ export default class CanvasView extends View {
         const canvas = document.createElement('canvas');
         canvas.setAttribute('width', '400');
         canvas.setAttribute('height', '400');
-        canvas.setAttribute('style', 'border: 1px solid #ddd');
+        canvas.setAttribute('style', 'border: solid ');
         canvas.setAttribute('id', 'canvas-drawing_pad');
+        canvas.setAttribute('margin','20px');
 
         const ctx = canvas.getContext('2d');
 
@@ -73,9 +75,10 @@ export default class CanvasView extends View {
 
             ctx.lineWidth = lineWidth;
             ctx.lineCap = 'round';
-            var canvas_elm = document.getElementById('canvas-drawing_pad').offsetParent
-            const canvasOffsetX = canvas_elm.offsetLeft;
-            const canvasOffsetY = canvas_elm.offsetTop;
+            var canvas_elm = document.getElementById('canvas-drawing_pad')
+            var canvas_elm_par = document.getElementById('canvas-drawing_pad').offsetParent
+            const canvasOffsetX = canvas_elm_par.offsetLeft + canvas_elm.offsetLeft;
+            const canvasOffsetY = canvas_elm_par.offsetTop + canvas_elm.offsetTop;
 
             ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
 
