@@ -35,20 +35,42 @@ export default class DrawpadUI extends Plugin {
         const canvasView = new CanvasView(editor.locale);
         this.listenTo(canvasView, 'submit', () => {
 
-        //sending a request
-        let request = new XMLHttpRequest();
-        const url = ``; //url
+            // var canvas_elm = document.getElementById('canvas-drawing_pad')
+            // var image_64_url = canvas_elm.toDataURL().split(';base64,')[1]
+            // var image_bin = window.atob(image_64_url);
 
-        request.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-            const response = JSON.parse(this.responseText);
-            console.log("response aayo ta",this.responseText);
-            // getElements(response);
-        }
-        };
+            // console.log(image_64_url)
+            //     // console.log(image_bin);
 
-        request.open("POST", url, true);
-        request.send();
+            // fetch("http://localhost:8000/image", {
+            //         method: "POST",
+            //         body: {
+            //             image_64_url,
+            //         })
+            //     .then((response) => response.json())
+            //     .then((data) => {
+            //         console.log("Success:", data);
+            //     })
+            //     .catch((error) => {
+            //         console.error("Error:", error);
+            //     });
+
+
+            //sending a request
+            let request = new XMLHttpRequest();
+            const url = ``; //url
+
+            request.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    const response = JSON.parse(this.responseText);
+
+                    console.log("response aayo ta", this.responseText);
+                    // getElements(response);
+                }
+            };
+
+            request.open("POST", url, true);
+            request.send();
 
             const selection = editor.model.document.selection;
             const text = this.canvasView.strInputView.fieldView.element.value;
@@ -62,8 +84,7 @@ export default class DrawpadUI extends Plugin {
             });
 
             this._hideUI();
-        })
-        this.listenTo(canvasView, 'cancel', () => {
+        }) this.listenTo(canvasView, 'cancel', () => {
 
             this._hideUI();
         })
@@ -101,8 +122,7 @@ export default class DrawpadUI extends Plugin {
     _showUI() {
         if (this._balloon.visibleView === this.canvasView) {
             this._hideUI();
-        }
-        else {
+        } else {
             this._balloon.add({
                 view: this.canvasView,
                 position: this._getBalloonPositionData()
