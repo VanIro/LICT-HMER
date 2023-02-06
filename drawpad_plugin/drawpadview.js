@@ -56,6 +56,7 @@ export default class CanvasView extends View {
         canvas.setAttribute('width', '400');
         canvas.setAttribute('height', '400');
         canvas.setAttribute('style', 'border: 1px solid #ddd');
+        canvas.setAttribute('id', 'canvas-drawing_pad');
 
         const ctx = canvas.getContext('2d');
 
@@ -76,6 +77,11 @@ export default class CanvasView extends View {
 
             ctx.lineWidth = lineWidth;
             ctx.lineCap = 'round';
+            canvas = document.getElementById('canvas-drawing_pad')
+            console.log(e.clientX,e.clientY);
+            const canvasOffsetX = canvas.offsetLeft;
+            const canvasOffsetY = canvas.offsetTop;
+            console.log(canvasOffsetX,canvasOffsetY);
 
             ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
 

@@ -35,6 +35,21 @@ export default class DrawpadUI extends Plugin {
         const canvasView = new CanvasView(editor.locale);
         this.listenTo(canvasView, 'submit', () => {
 
+        //sending a request
+        let request = new XMLHttpRequest();
+        const url = ``; //url
+
+        request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            const response = JSON.parse(this.responseText);
+            console.log("response aayo ta",this.responseText);
+            // getElements(response);
+        }
+        };
+
+        request.open("POST", url, true);
+        request.send();
+
             const selection = editor.model.document.selection;
             const text = this.canvasView.strInputView.fieldView.element.value;
 
