@@ -9,10 +9,7 @@
 </head>
 <body>
     <math-field>$$\frac{\pi}{2}$$</math-field>
-    <div class="canvas-container">
-
-    </div>
-    <canvas id="canvas" resize></canvas>
+    <canvas id="canvas" resize style="border:solid;"></canvas>
     <script type="text/paperscript" canvas="canvas">
         var myPath;
 
@@ -24,8 +21,12 @@
         
         function onMouseDrag(event) {
             console.log(event.point);
-            point=
-            myPath.add(event.point);
+            x = event.point.x 
+            y = event.point.y 
+            point= new Point(x,y);
+            console.log(this.view.element.offsetLeft);
+            console.log(this.view.element.offsetWidth);
+            myPath.add(point);
         }
 
  </script>
