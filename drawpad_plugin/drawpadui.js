@@ -32,59 +32,56 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const canvasView = new CanvasView(editor.locale);
     this.listenTo(canvasView, "submit", () => {
+      var canvas_elm = document.getElementById("canvas-drawing_pad");
+      var image_64 = canvas_elm.toDataURL().split("base64,")[1];
+      // console.log(image_64)
 
-            var canvas_elm = document.getElementById('canvas-drawing_pad')
-            var image_64 = canvas_elm.toDataURL().split('base64,')[1];
-            // console.log(image_64)
+      var data = {
+        img_file: image_64,
+      };
+      //sending a request
 
-            var data = {
-                img_file:image_64
-            }
-            //sending a request
+      const response = fetch("http://127.0.0.1:8000/process-image/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: JSON.stringify(data),
+      });
 
-            const response = fetch('http://127.0.0.1:8000/process-image',{
-                method:'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                body: JSON.stringify(data)
+      const selection = editor.model.document.selection;
+      const text = this.canvasView.strInputView.fieldView.element.value;
 
-            })
+      // Change the model to insert the abbreviation.
+      editor.model.change((writer) => {
+        editor.model.insertContent(
+          // Create a text node with the abbreviation attribute.
+          writer.createText(text)
+        );
+      });
 
-                const selection = editor.model.document.selection;
-                const text = this.canvasView.strInputView.fieldView.element.value;
+      this._hideUI();
+    });
+    this.listenTo(canvasView, "cancel", () => {
+      this._hideUI();
+    });
 
-                // Change the model to insert the abbreviation.
-                editor.model.change(writer => {
-                    editor.model.insertContent(
-                        // Create a text node with the abbreviation attribute.
-                        writer.createText(text)
-                    );
-                });
+    // Hide the form view when clicking outside the balloon.
+    clickOutsideHandler({
+      emitter: canvasView,
+      activator: () => this._balloon.visibleView === canvasView,
+      contextElements: [this._balloon.view.element],
+      callback: () => this._hideUI(),
+    });
 
-                this._hideUI();
-        })
-        this.listenTo(canvasView, 'cancel', () => {
+    canvasView.keystrokes.set("Esc", (data, cancel) => {
+      this._hideUI();
+      cancel();
+    });
 
-            this._hideUI();
-        })
-
-        // Hide the form view when clicking outside the balloon.
-        clickOutsideHandler({
-            emitter: canvasView,
-            activator: () => this._balloon.visibleView === canvasView,
-            contextElements: [this._balloon.view.element],
-            callback: () => this._hideUI()
-        });
-
-        canvasView.keystrokes.set('Esc', (data, cancel) => {
-            this._hideUI();
-            cancel();
-        })
-
-        return canvasView;
-    }
+    return canvasView;
+  }
   _getBalloonPositionData() {
     const view = this.editor.editing.view;
     const viewDocument = view.document;
