@@ -66,8 +66,6 @@ export default class DrawpadUI extends Plugin {
                 const selection = editor.model.document.selection;
                 const text = this.canvasView.strInputView.fieldView.element.value;
 
-                
-
                 this._hideUI();
         })
         this.listenTo(canvasView, 'cancel', () => {
