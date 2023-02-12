@@ -50,23 +50,30 @@ export default class DrawpadUI extends Plugin {
                     },
                 body: JSON.stringify(data)
 
+            }).then((response)=>{
+              return response.json();
+            }).then((data)=>{
+              console.log(data);
+              // Change the model to insert the response.
+              editor.model.change(writer => {
+                editor.model.insertContent(
+                    // Create a text node with the abbreviation attribute.
+                    writer.createText(data['message'])
+                );
+            });
             })
 
                 const selection = editor.model.document.selection;
                 const text = this.canvasView.strInputView.fieldView.element.value;
 
-                // Change the model to insert the abbreviation.
-                editor.model.change(writer => {
-                    editor.model.insertContent(
-                        // Create a text node with the abbreviation attribute.
-                        writer.createText(text)
-                    );
-                });
+                
 
                 this._hideUI();
         })
         this.listenTo(canvasView, 'cancel', () => {
-
+            var canvas_elm = document.getElementById('canvas-drawing_pad')
+            const context = canvas_elm.getContext('2d');
+            context.clearRect(0, 0, canvas_elm.width, canvas_elm.height);
             this._hideUI();
         })
 
