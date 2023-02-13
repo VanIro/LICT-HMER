@@ -14,6 +14,7 @@ import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 
 import Drawpad from './drawpad_plugin/drawpad'
+import Abbreviation from './abbreviation/abbreviation'
 
 ClassicEditor
 	.create(document.querySelector('#mathtype-editor'), {
@@ -23,13 +24,15 @@ ClassicEditor
 			ImageUpload,
 			CloudServices,
 			MathType,
-			Drawpad
+			Drawpad,
+			Abbreviation
 		],
 		toolbar: {
 			items: [
 				'heading',
 				'|',
 				'drawpad',
+				'abbreviation',
 				'|',
 				'bold',
 				'italic',

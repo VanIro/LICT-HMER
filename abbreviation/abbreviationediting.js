@@ -38,7 +38,7 @@ export default class AbbreviationEditing extends Plugin {
 		// Conversion from a view element to a model attribute
 		conversion.for( 'upcast' ).elementToAttribute( {
 			view: {
-				name: 'abbr',
+				name: 'math-field',
 				attributes: [ 'title' ]
 			},
 			model: {

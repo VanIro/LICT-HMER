@@ -54,8 +54,8 @@ export default class CanvasView extends View {
     }
     getHTML_Canvas() {
         const canvas = document.createElement('canvas');
-        canvas.setAttribute('width', '400');
-        canvas.setAttribute('height', '400');
+        canvas.setAttribute('width', '500');
+        canvas.setAttribute('height', '200');
         canvas.setAttribute('style', 'border: solid ');
         canvas.setAttribute('id', 'canvas-drawing_pad');
         canvas.setAttribute('margin','20px');

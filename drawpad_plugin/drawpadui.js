@@ -56,17 +56,35 @@ export default class DrawpadUI extends Plugin {
               console.log(data);
               // Change the model to insert the response.
               editor.model.change(writer => {
+                const math_node = writer.createElement('math-node');
+                writer.insertText(data['message'],math_node)
                 editor.model.insertContent(
                     // Create a text node with the abbreviation attribute.
-                    writer.createText(data['message'])
+                    // writer.createText(data['message'],{'math-node':'k ho k'})
+                    math_node
                 );
             });
-            })
+          })
 
-                const selection = editor.model.document.selection;
-                const text = this.canvasView.strInputView.fieldView.element.value;
+          // data={message:'\\theta'}
+          // editor.model.change(writer => {
+          //   const math_node = writer.createElement('math-node');
+          //   writer.insertText(data['message'],math_node)
+          //   console.log("This is a ",math_node)
+          //   var elm = document.getElementById('math-test')
+          //   console.log(elm);
+          //   elm.appendChild(math_node);
+          //   editor.model.insertContent(
+          //       // Create a text node with the abbreviation attribute.
+          //       // writer.createText(data['message'],{'math-node':'k ho k'})
+          //       math_node
+          //   );
+          // });
 
-                this._hideUI();
+          const selection = editor.model.document.selection;
+          const text = this.canvasView.strInputView.fieldView.element.value;
+
+          this._hideUI();
         })
         this.listenTo(canvasView, 'cancel', () => {
             var canvas_elm = document.getElementById('canvas-drawing_pad')
