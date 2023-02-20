@@ -14,11 +14,9 @@ import { icons } from '@ckeditor/ckeditor5-core';
 export default class CanvasView extends View {
     constructor(locale) {
         super(locale);
-
         this.keystrokes = new KeystrokeHandler();
-
+        //TODO: Remove this input field
         this.strInputView = this._createInput('Add text');
-
 
         // Create the save and cancel buttons.
         this.saveButtonView = this._createButton(
@@ -44,7 +42,7 @@ export default class CanvasView extends View {
             attributes: {
                 class: ['ck', 'ck-abbr-form'],
                 tabindex: '-1',
-                'text-align':'center',
+                'text-align': 'center',
             },
             children: [
                 this.getHTML_Canvas(),
@@ -58,13 +56,13 @@ export default class CanvasView extends View {
         canvas.setAttribute('height', '200');
         canvas.setAttribute('style', 'border: solid ');
         canvas.setAttribute('id', 'canvas-drawing_pad');
-        canvas.setAttribute('margin','20px');
+        canvas.setAttribute('margin', '20px');
 
         const ctx = canvas.getContext('2d');
 
 
         let isPainting = false;
-        let lineWidth = 5;
+        let lineWidth = 1;
         let startX;
         let startY;
 
@@ -121,7 +119,6 @@ export default class CanvasView extends View {
     focus() {
         this.childViews.first.focus();
     }
-
     _createInput(label) {
         const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
 
