@@ -5,32 +5,34 @@
     <meta charset="utf-8">
     <title>CKEditor 5 Framework – Quick start</title>
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .editor {
+            width: 800px;
+            max-width: 100%;
+        }
+    </style>
     <script src="https://unpkg.com/mathlive"></script>
 </head>
 
 <body>
-    <math-field style="width:max-content;">\frac{\alpha}{\psi^7}</math-field>
-    <div id="mathtype-editor">
-        <p>Kehi ta lekha .</p>
-        <math-field>\frac{\alpha}{\psi^7}</math-field>
-        <!-- <p>This is a simple box:</p>
-
-        <section class="simple-box">
-            <h1 class="simple-box-title">Box title</h1>
-            <div class="simple-box-description">
-                <p>The description goes here.</p>
-                <ul>
-                    <li>It can contain lists,</li>
-                    <li>and other block elements like headings.</li>
-                </ul>
+    <div class="container">
+        <div class="editor">
+            <div id="math-test"></div>
+            <div id="mathtype-editor">
+                <math-field>\theta</math-field>
+                <p placeholder="Editor content goes here."></p>
             </div>
-        </section> -->
-    </div>
+        </div>
 
-    <!-- <script src="https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image"></script> -->
-    <script src="bundle.js"></script>
-    <!-- <script src="js/bundle.js"></script> -->
-    
+        <!-- <script src=" https://www.wiris.net/demo/plugins/app/WIRISplugins.js?viewer=image "></script> -->
+        <script src="bundle.js "></script>
+        <!-- <script src="js/bundle.js "></script> -->
+    </div>
 
 
 </body>
