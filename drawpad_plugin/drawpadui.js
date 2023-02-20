@@ -46,39 +46,47 @@ export default class DrawpadUI extends Plugin {
             }
             //sending a request
 
-          //fetch('http://127.0.0.1:8000/process-image',{
-          //       method:'POST',
-          //       headers: {
-          //           'Content-Type': 'application/json'
-          //           // 'Content-Type': 'application/x-www-form-urlencoded',
-          //           },
-          //       body: JSON.stringify(data)
+          fetch('http://127.0.0.1:8000/process-image',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                body: JSON.stringify(data)
 
-          //   }).then((response)=>{
-          //     return response.json();
-          //   }).then((data)=>{
-          //     console.log(data);
-          //     // Change the model to insert the response.
-          //     //insert a math-node
-          //     editor.model.change(writer => {
-          //         editor.model.insertContent( writer.createText( data['message'], { 'math-node':true} ) );
-          //     });
-          //     // insert plain text
-          //     // editor.model.change( writer => {
-          //     //       editor.model.insertContent( writer.createText( data['message'] ) );
-          //     // });
-          // })
+            }).then((response)=>{
+              return response.json();
+            }).then((data)=>{
+              console.log(data);
+              // Change the model to insert the response.
+              //insert a math-node
+              editor.model.change( writer => {
+                editor.model.insertContent( writer.createText( data['message'], { 'math-node': 'math-node' } ) );
+              } );
+              // editor.model.change(writer => {
+              //     editor.model.insertContent( writer.createText( data['message'], { 'math-node':true} ) );
+              // });
+              // insert plain text
+              // editor.model.change( writer => {
+              //       editor.model.insertContent( writer.createText( data['message'] ) );
+              // });
+          })
 
           //for testing purposes, data is a dummy response
 
           data={message:'\\theta'}
           //insert a math-node
-          editor.model.change(writer => {
-            const math_node = writer.createElement('math-node');
-            writer.appendText(data['message'],math_node);
-            editor.model.insertObject( math_node, null, null, { setSelection: 'on' }  );
-            console.log("hey yall!");
-          });
+
+          editor.model.change( writer => {
+            editor.model.insertContent( writer.createText( data['message'], { 'math-node': 'math-node' } ) );
+          } );
+
+          // editor.model.change(writer => {
+          //   const math_node = writer.createElement('math-node');
+          //   writer.appendText(data['message'],math_node);
+          //   editor.model.insertObject( math_node, null, null, { setSelection: 'on' }  );
+          //   console.log("hey yall!");
+          // });
           // insert plain text
           // editor.model.change( writer => {
             //       editor.model.insertContent( writer.createText( data['message'] ) );
