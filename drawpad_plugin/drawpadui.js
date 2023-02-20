@@ -4,6 +4,8 @@ import { ContextualBalloon, clickOutsideHandler } from "@ckeditor/ckeditor5-ui";
 import CanvasView from "./drawpadview";
 import "./styles.css";
 
+import DrawpadCommand from "./drawpadcommand";
+
 export default class DrawpadUI extends Plugin {
   static get requires() {
     return [ContextualBalloon];
@@ -26,6 +28,8 @@ export default class DrawpadUI extends Plugin {
 
       return button;
     });
+
+    this.editor.commands.add( 'math_node', new DrawpadCommand( this.editor ) );
   }
 
   _createCanvasView() {
@@ -42,49 +46,49 @@ export default class DrawpadUI extends Plugin {
             }
             //sending a request
 
-            const response = fetch('http://127.0.0.1:8000/process-image',{
-                method:'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                body: JSON.stringify(data)
+          //fetch('http://127.0.0.1:8000/process-image',{
+          //       method:'POST',
+          //       headers: {
+          //           'Content-Type': 'application/json'
+          //           // 'Content-Type': 'application/x-www-form-urlencoded',
+          //           },
+          //       body: JSON.stringify(data)
 
-            }).then((response)=>{
-              return response.json();
-            }).then((data)=>{
-              console.log(data);
-              // Change the model to insert the response.
-              editor.model.change(writer => {
-                const math_node = writer.createElement('math-node');
-                writer.insertText(data['message'],math_node)
-                editor.model.insertContent(
-                    // Create a text node with the abbreviation attribute.
-                    // writer.createText(data['message'],{'math-node':'k ho k'})
-                    math_node
-                );
-            });
-          })
+          //   }).then((response)=>{
+          //     return response.json();
+          //   }).then((data)=>{
+          //     console.log(data);
+          //     // Change the model to insert the response.
+          //     //insert a math-node
+          //     editor.model.change(writer => {
+          //         editor.model.insertContent( writer.createText( data['message'], { 'math-node':true} ) );
+          //     });
+          //     // insert plain text
+          //     // editor.model.change( writer => {
+          //     //       editor.model.insertContent( writer.createText( data['message'] ) );
+          //     // });
+          // })
 
-          // data={message:'\\theta'}
-          // editor.model.change(writer => {
-          //   const math_node = writer.createElement('math-node');
-          //   writer.insertText(data['message'],math_node)
-          //   console.log("This is a ",math_node)
-          //   var elm = document.getElementById('math-test')
-          //   console.log(elm);
-          //   elm.appendChild(math_node);
-          //   editor.model.insertContent(
-          //       // Create a text node with the abbreviation attribute.
-          //       // writer.createText(data['message'],{'math-node':'k ho k'})
-          //       math_node
-          //   );
-          // });
+          //for testing purposes, data is a dummy response
 
-          const selection = editor.model.document.selection;
-          const text = this.canvasView.strInputView.fieldView.element.value;
-
-          this._hideUI();
+          data={message:'\\theta'}
+          //insert a math-node
+          editor.model.change(writer => {
+            const math_node = writer.createElement('math-node');
+            writer.appendText(data['message'],math_node);
+            editor.model.insertObject( math_node, null, null, { setSelection: 'on' }  );
+            console.log("hey yall!");
+          });
+          // insert plain text
+          // editor.model.change( writer => {
+            //       editor.model.insertContent( writer.createText( data['message'] ) );
+            // });
+            
+            // const selection = editor.model.document.selection;
+            // const text = this.canvasView.strInputView.fieldView.element.value;
+            
+            console.log("hey!");
+            this._hideUI();
         })
         this.listenTo(canvasView, 'cancel', () => {
             var canvas_elm = document.getElementById('canvas-drawing_pad')

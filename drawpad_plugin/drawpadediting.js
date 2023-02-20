@@ -1,9 +1,14 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 
+import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
+import Widget from '@ckeditor/ckeditor5-widget/src/widget';
+
 export default class DrawpadEditing extends Plugin {
+    static get requires() {
+        return [ Widget ];
+    }
     init() {
-        this._defineSchema();	
-        console.log('init of editing...');								
+        this._defineSchema();									
     }
 
     _defineSchema() {											
@@ -11,43 +16,72 @@ export default class DrawpadEditing extends Plugin {
 
         // Extend the text node's schema to accept the math-field attribute.
         schema.register( 'math-node', {
-            allowAttributes: [ 'math-field' ]
+            // allowIn:'$root',
+            inheritAllFrom:'$inlineObject'
         } );
     }
 
     _defineConverters() {									
         const conversion = this.editor.conversion;
+        
+        // Conversion from a view element to a model attribute.
+        conversion.for( 'upcast' ).elementToelement( {
+            view: {
+                name: 'math-field',
+                // attributes: ['style' ]//'role', 'dir', 'aria-label', 'contenteditable','aria-multiline','tabindex' ]
+            },
+            model: ( viewElement, { writer: modelWriter } ) => {
+                // Extract the "name" from "{name}".
+                // const name = viewElement.getChild( 0 ).data.slice( 1, -1 );
+                console.log("upcast ma xu")
+                return modelWriter.createElement( 'math-node' );
+            }
+        } );
 
         // Conversion from a model attribute to a view element.
-        conversion.for( 'downcast' ).attributeToElement( {
+        conversion.for( 'editingDowncast' ).elementToElement( {
             model: 'math-node',
             // Callback function provides access to the model attribute value
             // and the DowncastWriter.
-            view: ( modelAttributeValue, conversionApi ) => {
-                const { writer } = conversionApi;
+            view: ( modelItem, { writer: viewWriter } ) => {
+                console.log("hey! editing downcast");
+                const element = viewWriter.createElement('math-field');
+                // const element = viewWriter.createElement('math-field',{
+                //     // style: 'width:max-content', 
+                //     role:"math", 
+                //     dir:"ltr",
+                //     'aria-label':"math input field",
+                //     contenteditable:"true",
+                //     'aria-multiline':"false",
+                //     tabindex:"0"
+                // })
 
-                return writer.createAttributeElement( 'math-field', 
-                    // {title: modelAttributeValue} 
-                );
+                // Enable widget handling on a placeholder element inside the editing view.
+                return toWidget( element, viewWriter );
+            }
+        } );
+        conversion.for( 'dataDowncast' ).elementToElement( {
+            model: 'math-node',
+            // Callback function provides access to the model attribute value
+            // and the DowncastWriter.
+            view: ( modelItem, { writer: viewWriter } ) => {
+                console.log("hey! data downcast");
+                const element = viewWriter.createElement('math-field')
+                // const element = viewWriter.createElement('math-field',{
+                //     // style: 'width:max-content', 
+                //     role:"math", 
+                //     dir:"ltr",
+                //     'aria-label':"math input field",
+                //     contenteditable:"true",
+                //     'aria-multiline':"false",
+                //     tabindex:"0"
+                // })
+
+                // Enable widget handling on a placeholder element inside the editing view.
+                return element;//toWidget( widgetElement, viewWriter );
             }
         } );
 
-        // Conversion from a view element to a model attribute.
-        conversion.for( 'upcast' ).elementToAttribute( {
-            view: {
-                name: 'math-field',
-                // attributes: [ 'title' ]
-            },
-            model: {
-                key: 'math-node',
-                // Callback function provides access to the view element.
-                value: viewElement => {
-                    // const title = viewElement.getAttribute( 'title' );
-                    // return title;
-                    return "hello-vai";
-                }
-            }
-        } );
 
     }
 }

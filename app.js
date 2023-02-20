@@ -15,6 +15,9 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 
 import Drawpad from './drawpad_plugin/drawpad'
 import Abbreviation from './abbreviation/abbreviation'
+import SimpleBox from './boxplugin/simplebox';
+
+import CKEditorInspector from '@ckeditor/ckeditor5-inspector'; 
 
 ClassicEditor
 	.create(document.querySelector('#mathtype-editor'), {
@@ -25,7 +28,8 @@ ClassicEditor
 			CloudServices,
 			MathType,
 			Drawpad,
-			Abbreviation
+			Abbreviation,
+			SimpleBox
 		],
 		toolbar: {
 			items: [
@@ -33,6 +37,7 @@ ClassicEditor
 				'|',
 				'drawpad',
 				'abbreviation',
+				'simpleBox',
 				'|',
 				'bold',
 				'italic',
@@ -66,6 +71,13 @@ ClassicEditor
 		table: {
 			contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
 		},
+	}).then((editor)=>{
+		
+        console.log( 'Editor was initialized', editor );
+
+        CKEditorInspector.attach( 'editor', editor );
+
+        window.editor = editor;
 	})
 	.catch(err => {
 		console.error(err.stack);

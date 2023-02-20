@@ -48,7 +48,7 @@ export default class AbbreviationUI extends Plugin {
 			const abbr = formView.abbrInputView.fieldView.element.value;
 
 			editor.model.change( writer => {
-				editor.model.insertContent( writer.createText( abbr, { abbreviation: title } ) );
+				editor.model.insertContent( writer.createText( abbr, { 'abbreviation':title,'math-node': 'math-node' } ) );
 			} );
 
             // Hide the form view after submit.
