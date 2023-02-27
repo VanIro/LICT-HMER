@@ -11,12 +11,13 @@ import { KeystrokeHandler } from '@ckeditor/ckeditor5-utils';
 
 import { icons } from '@ckeditor/ckeditor5-core';
 
-export default class CanvasView extends View {
+export default class MathNodeView extends View {
     constructor(locale) {
         super(locale);
         this.keystrokes = new KeystrokeHandler();
         //TODO: Remove this input field
-        this.strInputView = this._createInput('Add text');
+        this.strInputView = this._createInput('Latex Code');
+        this.mathlivView = this.get_mathliv_element();
 
         // Create the save and cancel buttons.
         this.saveButtonView = this._createButton(
@@ -33,7 +34,7 @@ export default class CanvasView extends View {
         this.cancelButtonView.delegate('execute').to(this, 'cancel');
 
         this.childViews = this.createCollection([
-            // this.strInputView,
+            this.strInputView,
             this.saveButtonView,
             this.cancelButtonView,
         ]);
@@ -45,64 +46,15 @@ export default class CanvasView extends View {
                 'text-align': 'center',
             },
             children: [
-                this.getHTML_Canvas(),
+                this.mathlivView,
                 ...this.childViews
             ],
         });
-    }
-    getHTML_Canvas() {
-        const canvas = document.createElement('canvas');
-        canvas.setAttribute('width', '500');
-        canvas.setAttribute('height', '200');
-        canvas.setAttribute('style', 'border: solid ');
-        canvas.setAttribute('id', 'canvas-drawing_pad');
-        canvas.setAttribute('margin', '20px');
-
-        const ctx = canvas.getContext('2d');
-
-
-        let isPainting = false;
-        let lineWidth = 1;
-        let startX;
-        let startY;
-
-        const draw = (e) => {
-            if (!isPainting) {
-                return;
-            }
-
-            ctx.lineWidth = lineWidth;
-            ctx.lineCap = 'round';
-            var canvas_elm = document.getElementById('canvas-drawing_pad')
-
-            var canvas_elm_par = document.getElementById('canvas-drawing_pad').offsetParent
-            const canvasOffsetX = canvas_elm_par.offsetLeft + canvas_elm.offsetLeft;
-            const canvasOffsetY = canvas_elm_par.offsetTop + canvas_elm.offsetTop;
-
-            ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
-
-            ctx.stroke();
-        }
-
-        canvas.addEventListener('mousedown', (e) => {
-            isPainting = true;
-            startX = e.clientX;
-            startY = e.clientY;
-        });
-
-        canvas.addEventListener('mouseup', e => {
-            isPainting = false;
-            ctx.stroke();
-            ctx.beginPath();
-        });
-
-        canvas.addEventListener('mousemove', draw);
-
-        let canv_container = document.createElement('div')
-        canv_container.className = "ck ck-rounded-corners"
-        canv_container.appendChild(canvas);
-
-        return canv_container;
+    }    
+    get_mathliv_element() {
+        const math_el = document.createElement('math-field');
+        math_el.innerHTML ="\\alpha"// "<math-field>\\alpha</math-field>"
+        return math_el;
     }
     render() {
         super.render();

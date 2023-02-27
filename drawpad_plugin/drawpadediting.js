@@ -3,12 +3,14 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 
+
 export default class DrawpadEditing extends Plugin {
     static get requires() {
         return [ Widget ];
     }
     init() {
-        this._defineSchema();									
+        this._defineSchema();	
+        this._defineConverters();					
     }
 
     _defineSchema() {											
@@ -16,8 +18,10 @@ export default class DrawpadEditing extends Plugin {
 
         // Extend the text node's schema to accept the math-field attribute.
         schema.register( 'math-node', {
-            // allowIn:'$root',
-            inheritAllFrom:'$inlineObject'
+            isObject:true,
+            inheritAllFrom:'$inlineObject',
+            // alloWhere:'$block',
+            allowAttributes:['latex_code','src']
         } );
     }
 
@@ -25,16 +29,21 @@ export default class DrawpadEditing extends Plugin {
         const conversion = this.editor.conversion;
         
         // Conversion from a view element to a model attribute.
-        conversion.for( 'upcast' ).elementToelement( {
+        conversion.for( 'upcast' ).elementToElement( {
             view: {
-                name: 'math-field',
-                // attributes: ['style' ]//'role', 'dir', 'aria-label', 'contenteditable','aria-multiline','tabindex' ]
+                name: 'img',
+                classes:['math-field'],
+                // attributes: ['src','latex_code']//'style' , 'role', 'dir', 'aria-label', 'contenteditable','aria-multiline', 'tabindex' ]
             },
             model: ( viewElement, { writer: modelWriter } ) => {
                 // Extract the "name" from "{name}".
-                // const name = viewElement.getChild( 0 ).data.slice( 1, -1 );
+                // const name = viewElement.getChild( 0 ).data;
+                const latex_code = viewElement.getAttribute('latex_code');
+                const src = viewElement.getAttribute('src');
                 console.log("upcast ma xu")
-                return modelWriter.createElement( 'math-node' );
+                const element = modelWriter.createElement( 'math-node',{'latex_code':latex_code,'src':src} )
+                // modelWriter.appendText(name,element)
+                return element;
             }
         } );
 
@@ -45,17 +54,46 @@ export default class DrawpadEditing extends Plugin {
             // and the DowncastWriter.
             view: ( modelItem, { writer: viewWriter } ) => {
                 console.log("hey! editing downcast");
-                const element = viewWriter.createElement('math-field');
-                // const element = viewWriter.createElement('math-field',{
-                //     // style: 'width:max-content', 
-                //     role:"math", 
-                //     dir:"ltr",
-                //     'aria-label':"math input field",
-                //     contenteditable:"true",
-                //     'aria-multiline':"false",
-                //     tabindex:"0"
-                // })
+                const latex_code = modelItem.getAttribute('latex_code');
+                const src = modelItem.getAttribute('src');
+                // const element = viewWriter.createEditableElement('math-field');
+                const element = viewWriter.createContainerElement('img',{'class':'math-field','latex_code':latex_code,'src':src});
+                const math_element = viewWriter.createContainerElement('math-field',{
+                    style: 'width:max-content', 
+                    // role:"math", 
+                    // dir:"ltr",
+                    // 'aria-label':"math input field",
+                    // contenteditable:"false",
+                    // 'aria-multiline':"false",
+                    // tabindex:"0"
+                })
+                // viewWriter.insert( viewWriter.createPositionAt( element, 0 ), math_element );
+                // console.log("editingDowncast",modelItem.getChild(0).data)
+                // const innerText = viewWriter.createText( modelItem.getAttribute('latex_code') );
+                // viewWriter.insert( viewWriter.createPositionAt( math_element, 0 ), innerText );
+                
+                // const container_element = viewWriter.createContainerElement( 'span', {
+                    // class: 'product',
+                    // 'data-id': id
+                // } );
+                // const element = viewWriter.createRawElement( 'math-field', 
+                //     {
+                //         style: 'width:max-content', 
+                //         role:"math", 
+                //         dir:"ltr",
+                //         'aria-label':"math input field",
+                //         contenteditable:"true",
+                //         'aria-multiline':"false",
+                //         tabindex:"0"
+                //     }, function( domElement ) {
+                //         domElement.innerHTML = '\\alpha';
+                    
+                //         return domElement;
+                //     } 
+                // );
 
+                // viewWriter.insert( viewWriter.createPositionAt( container_element, 0 ), element );
+                
                 // Enable widget handling on a placeholder element inside the editing view.
                 return toWidget( element, viewWriter );
             }
@@ -66,7 +104,7 @@ export default class DrawpadEditing extends Plugin {
             // and the DowncastWriter.
             view: ( modelItem, { writer: viewWriter } ) => {
                 console.log("hey! data downcast");
-                const element = viewWriter.createElement('math-field')
+                // const element = viewWriter.createEditableElement('div')
                 // const element = viewWriter.createElement('math-field',{
                 //     // style: 'width:max-content', 
                 //     role:"math", 
@@ -76,6 +114,11 @@ export default class DrawpadEditing extends Plugin {
                 //     'aria-multiline':"false",
                 //     tabindex:"0"
                 // })
+                let latex_code = modelItem.getAttribute('latex_code')
+                let src = modelItem.getAttribute('src')
+                const element = viewWriter.createContainerElement('img',{'class':'math-field','latex_code':latex_code, 'src':src});
+                // const innerText = viewWriter.createText( latex_code );
+                // viewWriter.insert( viewWriter.createPositionAt( element, 0 ), innerText );
 
                 // Enable widget handling on a placeholder element inside the editing view.
                 return element;//toWidget( widgetElement, viewWriter );

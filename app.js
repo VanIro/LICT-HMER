@@ -17,11 +17,21 @@ import Drawpad from './drawpad_plugin/drawpad'
 import Abbreviation from './abbreviation/abbreviation'
 import SimpleBox from './boxplugin/simplebox';
 
+import Mathematics from 'ckeditor5-math/src/math';
+
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector'; 
+
 
 ClassicEditor
 	.create(document.querySelector('#mathtype-editor'), {
+		math: {
+			engine: 'mathjax',
+			outputType: 'script',
+			forceOutputType: false,
+			enablePreview: true
+		},
 		plugins: [
+			Mathematics,
 			Essentials, Paragraph, Heading, List, Bold, Italic,
 			EasyImage,
 			ImageUpload,
@@ -71,13 +81,15 @@ ClassicEditor
 		table: {
 			contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
 		},
-	}).then((editor)=>{
+	})
+	.then((editor)=>{
 		
-        console.log( 'Editor was initialized', editor );
+		// console.log( 'Editor was initialized', editor );
 
-        CKEditorInspector.attach( 'editor', editor );
+		CKEditorInspector.attach( 'editor', editor );
 
-        window.editor = editor;
+		window.editor = editor;
+		// return editor;
 	})
 	.catch(err => {
 		console.error(err.stack);
