@@ -210,7 +210,10 @@ export default class DrawpadUI extends Plugin {
       position: this._getBalloonPositionData(),
     });
     this.mathNodeView.mathlivView.innerHTML=latex_code
-    this.strInputView.
+    // console.log(this.mathNodeView.fieldView.element);
+    console.log(this.mathNodeView.strInputView.element.querySelector('input'));
+    // this.mathNodeView.strInputView.element.querySelector('input').value = latex_code;
+    this.mathNodeView.strInputView.fieldView.value=latex_code
     this.mathNodeView.focus();
   }
   _hideWidgetUI(view) {

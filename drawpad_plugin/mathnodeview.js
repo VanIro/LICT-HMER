@@ -2,6 +2,7 @@ import {
     View,
     LabeledFieldView,
     createLabeledInputText,
+    InputTextView,
     ButtonView,
     submitHandler,
     Template,
@@ -72,6 +73,19 @@ export default class MathNodeView extends View {
     }
     _createInput(label) {
         const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
+        // const labeledInput = new LabeledFieldView(this.locale, ( labeledFieldView, viewUid, statusUid ) => {
+        //     const inputView = new InputTextView( labeledFieldView.locale );
+        
+        //     inputView.set( {
+        //         id: viewUid,
+        //         ariaDescribedById: statusUid
+        //     } );
+        
+        //     // inputView.bind( 'isReadOnly' ).to( labeledFieldView, 'isEnabled', value => !value );
+        //     // inputView.bind( 'hasError' ).to( labeledFieldView, 'errorText', value => !!value );
+        
+        //     return inputView;
+        // } );
 
         labeledInput.label = label;
 
