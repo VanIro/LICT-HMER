@@ -68,8 +68,10 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const mathNodeView = new MathNodeView(editor.locale);
     this.listenTo(mathNodeView, "submit", () => {
-            MathJax.typeset();
-            console.log("mathNodeView submit!");
+      let mathliv_code = mathNodeView.mathlivView.innerHTML
+      let strInp_code = mathNodeView.strInputView.fieldView.value
+      console.log(mathliv_code,strInp_code)
+      console.log("mathNodeView submit!");
     })
     this.listenTo(mathNodeView, 'cancel', () => {7
       console.log("mathNodeView cancel!");
@@ -207,12 +209,22 @@ export default class DrawpadUI extends Plugin {
     if (modelElement){
       latex_code = modelElement.getAttribute('latex_code')
     }
+    // this.mathNodeView.latex_code = latex_code
     this._widgetBalloon.add({
       view: this.mathNodeView,
       position: this._getBalloonPositionData(),
     });
     this.mathNodeView.mathlivView.innerHTML=latex_code
     this.mathNodeView.strInputView.fieldView.value=latex_code
+
+    this.mathNodeView.mathlivView.onkeyup=(arg)=>{
+      console.log('Changed mathliv',arg,this.mathNodeView.mathlivView.innerHTML)
+    }
+    console.log(this.mathNodeView.strInputView.fieldView.element)
+    this.mathNodeView.strInputView.fieldView.element.onkeyup=(arg)=>{
+      console.log('Changed strInput',this.mathNodeView.strInputView.fieldView.element.value)
+      this.mathNodeView.mathlivView.innerHTML = this.mathNodeView.strInputView.fieldView.element.value
+    }
 
     this.mathNodeView.focus();
   }
