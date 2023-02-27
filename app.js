@@ -15,23 +15,17 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 
 import Drawpad from './drawpad_plugin/drawpad'
 import Abbreviation from './abbreviation/abbreviation'
-import SimpleBox from './boxplugin/simplebox';
+// import SimpleBox from './boxplugin/simplebox';
 
-import Mathematics from 'ckeditor5-math/src/math';
+// import Mathematics from 'ckeditor5-math/src/math';
 
 import CKEditorInspector from '@ckeditor/ckeditor5-inspector'; 
 
 
 ClassicEditor
 	.create(document.querySelector('#mathtype-editor'), {
-		math: {
-			engine: 'mathjax',
-			outputType: 'script',
-			forceOutputType: false,
-			enablePreview: true
-		},
 		plugins: [
-			Mathematics,
+			// Mathematics,
 			Essentials, Paragraph, Heading, List, Bold, Italic,
 			EasyImage,
 			ImageUpload,
@@ -39,7 +33,7 @@ ClassicEditor
 			MathType,
 			Drawpad,
 			Abbreviation,
-			SimpleBox
+			// SimpleBox
 		],
 		toolbar: {
 			items: [

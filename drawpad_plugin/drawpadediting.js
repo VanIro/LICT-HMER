@@ -57,16 +57,27 @@ export default class DrawpadEditing extends Plugin {
                 const latex_code = modelItem.getAttribute('latex_code');
                 const src = modelItem.getAttribute('src');
                 // const element = viewWriter.createEditableElement('math-field');
-                const element = viewWriter.createContainerElement('img',{'class':'math-field','latex_code':latex_code,'src':src});
-                const math_element = viewWriter.createContainerElement('math-field',{
-                    style: 'width:max-content', 
-                    // role:"math", 
-                    // dir:"ltr",
-                    // 'aria-label':"math input field",
-                    // contenteditable:"false",
-                    // 'aria-multiline':"false",
-                    // tabindex:"0"
-                })
+                // const container = viewWriter.createContainerElement('span',{'class':'math-field-cont'});
+                const src2 = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(latex_code);
+                const element = viewWriter.createContainerElement('img',{'class':'math-field','latex_code':latex_code,'src':src2});
+                // const element = viewWriter.createContainerElement('span',{'class':'math-field',id:'math-field-disp','latex_code':latex_code,'src':src});
+                // const mathelm = viewWriter.createText('\\('+ latex_code +'\\)')
+                // viewWriter.insert( viewWriter.createPositionAt( element, 0 ), mathelm )
+                // console.log(element)
+                // MathJax.typeset();
+                // var math = MathJax.typeset([mathelm.document])//.Hub.getAllJax("math-field-disp")[0];
+                // console.log(math)
+                // MathJax.Hub.Queue(["Text",math,latex_code]);
+                // viewWriter.insert( viewWriter.createPositionAt( container, 1 ), mathelm )
+                // const math_element = viewWriter.createContainerElement('math-field',{
+                //     style: 'width:max-content', 
+                //     // role:"math", 
+                //     // dir:"ltr",
+                //     // 'aria-label':"math input field",
+                //     // contenteditable:"false",
+                //     // 'aria-multiline':"false",
+                //     // tabindex:"0"
+                // })
                 // viewWriter.insert( viewWriter.createPositionAt( element, 0 ), math_element );
                 // console.log("editingDowncast",modelItem.getChild(0).data)
                 // const innerText = viewWriter.createText( modelItem.getAttribute('latex_code') );
@@ -95,6 +106,7 @@ export default class DrawpadEditing extends Plugin {
                 // viewWriter.insert( viewWriter.createPositionAt( container_element, 0 ), element );
                 
                 // Enable widget handling on a placeholder element inside the editing view.
+
                 return toWidget( element, viewWriter );
             }
         } );

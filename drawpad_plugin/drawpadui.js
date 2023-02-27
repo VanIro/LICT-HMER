@@ -55,6 +55,7 @@ export default class DrawpadUI extends Plugin {
 
     this.editor.listenTo( viewDocument, 'dblclick', ( evt, data ) => {
         const modelElement = this.editor.editing.mapper.toModelElement( data.target);
+        console.log(data,data.target)
 
         if ( modelElement.name == 'math-node' ) {
             this._showWidgetUI(modelElement);
@@ -67,6 +68,7 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const mathNodeView = new MathNodeView(editor.locale);
     this.listenTo(mathNodeView, "submit", () => {
+            MathJax.typeset();
             console.log("mathNodeView submit!");
     })
     this.listenTo(mathNodeView, 'cancel', () => {7
@@ -93,7 +95,7 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const canvasView = new CanvasView(editor.locale);
     this.listenTo(canvasView, "submit", () => {
-
+            MathJax.typeset();
             var canvas_elm = document.getElementById('canvas-drawing_pad')
             var image_64 = canvas_elm.toDataURL().split('base64,')[1];
             // console.log(image_64)
@@ -210,10 +212,8 @@ export default class DrawpadUI extends Plugin {
       position: this._getBalloonPositionData(),
     });
     this.mathNodeView.mathlivView.innerHTML=latex_code
-    // console.log(this.mathNodeView.fieldView.element);
-    console.log(this.mathNodeView.strInputView.element.querySelector('input'));
-    // this.mathNodeView.strInputView.element.querySelector('input').value = latex_code;
     this.mathNodeView.strInputView.fieldView.value=latex_code
+
     this.mathNodeView.focus();
   }
   _hideWidgetUI(view) {
