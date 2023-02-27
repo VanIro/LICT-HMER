@@ -1,5 +1,9 @@
 .ck-editor__editable_inline {
-	height: 90vh;
+	height: 110vh;
+}
+
+ck-inspector-navbox {
+	display: hidden;
 }
 
 .ck.ck-abbr-form {
@@ -29,15 +33,19 @@
 
 body {
 	margin: 0;
+	-ms-overflow-style: none;
+	overflow: hidden;
 }
 
+body::-webkit-scrollbar {
+	display: none;
+}
 
 .full-body {
-	overflow: hidden;
 	background-color: rgba(255, 255, 255, 1);
-	width: 100%;
-	height: 1024px;
-	position: absolute;
+	/* width: 100%; */
+	height: 100vh;
+	overflow: hidden;
 }
 
 .NavBar {
@@ -52,29 +60,42 @@ body {
 
 .FileList {
 	background-color: rgba(230.00000149011612, 230.00000149011612, 230.00000149011612, 1);
-	width: 247px;
-	height: 1024px;
+	width: 12.8vw;
+	height: 100vh;
 	position: absolute;
 	left: 11.1vw;
 	top: 0px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.FileList::-webkit-scrollbar {
+	display: none;
 }
 
 .ToolBar {
 	background-color: rgba(252.4500024318695, 252.4500024318695, 252.4500024318695, 1);
-	width: 83px;
-	height: 1024px;
+	width: 4.33vw;
+	height: 100vh;
 	position: absolute;
-	left: 1356px;
 	top: 0px;
+	right: 0px;
 }
 
 .Main {
 	background-color: rgba(255, 255, 255, 1);
-	width: 934px;
-	height: 1024px;
+	width: auto;
+	height: 100vh;
 	position: absolute;
-	left: 420px;
+	left: 24vw;
 	top: 0px;
+	right: 4.4vw;
+	overflow-y: scroll;
+	overflow-x: visible;
+}
+
+.Main::-webkit-scrollbar {
+	display: none;
 }
 
 .e4_211 {
@@ -876,8 +897,8 @@ body {
 	width: 39px;
 	height: 39px;
 	position: absolute;
-	left: 18px;
-	top: 958px;
+	bottom: 25px;
+	right: 25px;
 }
 
 .e4_259 {
@@ -1074,16 +1095,16 @@ body {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.20000000298023224);
 	width: 402px;
 	height: 275px;
-	position: absolute;
-	left: 524px;
-	top: 736px;
+	position: fixed;
+	bottom: 5px;
+	right: 6vw;
 }
 
 .e4_279 {
 	background-color: rgba(255, 255, 255, 1);
 	width: 402px;
 	height: 256px;
-	position: absolute;
+	position: relative;
 	left: 0px;
 	top: 0px;
 	border-radius: 20px;
@@ -1092,9 +1113,7 @@ body {
 .e4_280 {
 	width: 402px;
 	height: 17px;
-	position: absolute;
-	left: 0px;
-	top: 258px;
+	position: relative;
 }
 
 .e4_281 {

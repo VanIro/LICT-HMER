@@ -43,6 +43,9 @@ export default class CanvasView extends View {
                 class: ['ck', 'ck-abbr-form'],
                 tabindex: '-1',
                 'text-align': 'center',
+                'postion': 'absolute',
+                'right': '0',
+                'bottom': '0',
             },
             children: [
                 this.getHTML_Canvas(),
@@ -75,9 +78,9 @@ export default class CanvasView extends View {
             ctx.lineCap = 'round';
             var canvas_elm = document.getElementById('canvas-drawing_pad')
 
-            var canvas_elm_par = document.getElementById('canvas-drawing_pad').offsetParent
-            const canvasOffsetX = canvas_elm_par.offsetLeft + canvas_elm.offsetLeft;
-            const canvasOffsetY = canvas_elm_par.offsetTop + canvas_elm.offsetTop;
+            var canvas_elm_par = document.getElementById('canvas-drawing_pad').offsetParent.getBoundingClientRect();
+            const canvasOffsetX = canvas_elm_par.left + canvas_elm.offsetLeft;
+            const canvasOffsetY = canvas_elm_par.top + canvas_elm.offsetTop;
 
             ctx.lineTo(e.clientX - canvasOffsetX, e.clientY - canvasOffsetY);
 
