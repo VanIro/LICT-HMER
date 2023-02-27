@@ -1,3 +1,7 @@
+.ck-editor__editable_inline {
+	height: 90vh;
+}
+
 .ck.ck-abbr-form {
 	padding: var(--ck-spacing-large);
 	/* display: grid; */
