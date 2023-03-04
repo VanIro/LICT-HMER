@@ -62,7 +62,7 @@ export default class CanvasView extends View {
 
 
         let isPainting = false;
-        let lineWidth = 1;
+        let lineWidth = 2;
         let startX;
         let startY;
 

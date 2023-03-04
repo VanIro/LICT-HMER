@@ -74,12 +74,12 @@ export default class DrawpadUI extends Plugin {
 
             //for testing purposes, data is a dummy response
 
-            data = { message: '\\theta' }
-                //insert a math-node
+            // data = { message: '\\theta' }
+            //     //insert a math-node
 
-            editor.model.change(writer => {
-                editor.model.insertContent(writer.createText(data['message'], { 'math-node': 'math-node' }));
-            });
+            // editor.model.change(writer => {
+            //     editor.model.insertContent(writer.createText(data['message'], { 'math-node': 'math-node' }));
+            // });
 
             // editor.model.change(writer => {
             //   const math_node = writer.createElement('math-node');

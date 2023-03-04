@@ -75,7 +75,7 @@ ClassicEditor
 
         console.log('Editor was initialized', editor);
 
-        // CKEditorInspector.attach('editor', editor);
+        CKEditorInspector.attach('editor', editor);
 
         window.editor = editor;
     })
