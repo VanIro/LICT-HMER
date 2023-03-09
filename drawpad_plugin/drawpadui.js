@@ -55,7 +55,7 @@ export default class DrawpadUI extends Plugin {
 
     this.editor.listenTo( viewDocument, 'dblclick', ( evt, data ) => {
         const modelElement = this.editor.editing.mapper.toModelElement( data.target);
-        console.log(data,data.target)
+        // console.log(data,data.target)
 
         if ( modelElement.name == 'math-node' ) {
             this._showWidgetUI(modelElement);
@@ -68,13 +68,23 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const mathNodeView = new MathNodeView(editor.locale);
     this.listenTo(mathNodeView, "submit", () => {
-      let mathliv_code = mathNodeView.mathlivView.innerHTML
-      let strInp_code = mathNodeView.strInputView.fieldView.value
-      console.log(mathliv_code,strInp_code)
-      console.log("mathNodeView submit!");
+      let mathliv_code = mathNodeView.mathlivView.value
+      // let strInp_code = mathNodeView.strInputView.fieldView.value
+      console.log(mathliv_code)
+      let elm = editor.model.document.selection.getSelectedElement();
+      let newSrc = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathliv_code);
+
+      editor.model.change( writer => {
+        const range = editor.model.document.selection.getFirstRange();
+        const math_node = writer.createElement('math-node',{'latex_code':mathliv_code,src:newSrc});
+        editor.model.insertObject( math_node, null, range, { setSelection: 'on' }  );
+      } );
+      // console.log("mathNodeView submit!");
+
     })
     this.listenTo(mathNodeView, 'cancel', () => {7
-      console.log("mathNodeView cancel!");
+      // console.log("mathNodeView cancel!");
+      this._hideWidgetUI();
     })
 
     // Hide the form view when clicking outside the balloon.
@@ -97,7 +107,7 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const canvasView = new CanvasView(editor.locale);
     this.listenTo(canvasView, "submit", () => {
-            MathJax.typeset();
+            // MathJax.typeset();
             var canvas_elm = document.getElementById('canvas-drawing_pad')
             var image_64 = canvas_elm.toDataURL().split('base64,')[1];
             // console.log(image_64)
@@ -136,7 +146,7 @@ export default class DrawpadUI extends Plugin {
           //for testing purposes, data is a dummy response
           var canvas_elm = document.getElementById('canvas-drawing_pad')
           var image_64 = canvas_elm.toDataURL().split('base64,')[1];
-          console.log(canvas_elm.toDataURL())
+          // console.log(canvas_elm.toDataURL())
 
           data = {
               message:'\\theta',
@@ -145,28 +155,11 @@ export default class DrawpadUI extends Plugin {
         
           //insert a math-node
 
-          // editor.model.change( writer => {
-          //   let math_node = writer.createElement('mathtex-inline',{equation:"hey",type:'span',display:'false'});
-          //   // writer.appendText(data['message'],math_node);
-          //   editor.model.insertContent( math_node);
-          //   // editor.model.insertContent( writer.createText( data['message'], { 'math-node': 'math-node' } ) );
-          // } );
-
           editor.model.change(writer => {
             const math_node = writer.createElement('math-node',{'latex_code':data['message'],src:data['img_file']});
             // writer.appendText(data['message'],math_node);
             editor.model.insertObject( math_node, null, null, { setSelection: 'on' }  );
-            console.log("hey yall!");
           });
-          // insert plain text
-          // editor.model.change( writer => {
-            //       editor.model.insertContent( writer.createText( data['message'] ) );
-            // });
-            
-            // const selection = editor.model.document.selection;
-            // const text = this.canvasView.strInputView.fieldView.element.value;
-            
-            console.log("hey!");
             this._hideUI();
         })
         this.listenTo(canvasView, 'cancel', () => {
@@ -214,24 +207,25 @@ export default class DrawpadUI extends Plugin {
       view: this.mathNodeView,
       position: this._getBalloonPositionData(),
     });
-    this.mathNodeView.mathlivView.innerHTML=latex_code
+    
     this.mathNodeView.strInputView.fieldView.value=latex_code
-
-    this.mathNodeView.mathlivView.onkeyup=(arg)=>{
-      console.log('Changed mathliv',arg,this.mathNodeView.mathlivView.innerHTML)
-    }
-    console.log(this.mathNodeView.strInputView.fieldView.element)
+    this.mathNodeView.mathlivView.value=latex_code
+    console.log(this.mathNodeView.strInputView.fieldView.value)
+    
+    this.mathNodeView.mathlivView.onkeyup = (arg)=>{
+      console.log('Changed mathliv',arg,this.mathNodeView.mathlivView.value)
+      this.mathNodeView.strInputView.fieldView.value=this.mathNodeView.mathlivView.value;
+    };
     this.mathNodeView.strInputView.fieldView.element.onkeyup=(arg)=>{
       console.log('Changed strInput',this.mathNodeView.strInputView.fieldView.element.value)
-      this.mathNodeView.mathlivView.innerHTML = this.mathNodeView.strInputView.fieldView.element.value
+      this.mathNodeView.mathlivView.value = this.mathNodeView.strInputView.fieldView.element.value
     }
 
     this.mathNodeView.focus();
   }
   _hideWidgetUI(view) {
-    // Clear the input field values and reset the form.
-    // this.canvasView.strInputView.fieldView.value = "";
-    // this.canvasView.element.reset();
+    
+    this.mathNodeView.element.reset();
 
     this._widgetBalloon.remove(this.mathNodeView);
 
@@ -251,8 +245,8 @@ export default class DrawpadUI extends Plugin {
     }
   }
   _hideUI() {
-    // Clear the input field values and reset the form.
-    this.canvasView.strInputView.fieldView.value = "";
+    // Reset the form.
+    
     this.canvasView.element.reset();
 
     this._balloon.remove(this.canvasView);

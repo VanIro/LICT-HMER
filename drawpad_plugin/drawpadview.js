@@ -15,8 +15,6 @@ export default class CanvasView extends View {
     constructor(locale) {
         super(locale);
         this.keystrokes = new KeystrokeHandler();
-        //TODO: Remove this input field
-        this.strInputView = this._createInput('Add text');
 
         // Create the save and cancel buttons.
         this.saveButtonView = this._createButton(
@@ -33,7 +31,6 @@ export default class CanvasView extends View {
         this.cancelButtonView.delegate('execute').to(this, 'cancel');
 
         this.childViews = this.createCollection([
-            // this.strInputView,
             this.saveButtonView,
             this.cancelButtonView,
         ]);
@@ -42,10 +39,12 @@ export default class CanvasView extends View {
             attributes: {
                 class: ['ck', 'ck-abbr-form'],
                 tabindex: '-1',
-                'text-align': 'center',
-                'postion': 'absolute',
-                'right': '0',
-                'bottom': '0',
+                style:"\
+                    text-align: center;\
+                    postion: absolute;\
+                    right: 0;\
+                    bottom: 0;\
+                ",
             },
             children: [
                 this.getHTML_Canvas(),

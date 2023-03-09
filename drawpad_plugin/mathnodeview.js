@@ -45,6 +45,7 @@ export default class MathNodeView extends View {
                 class: ['ck', 'ck-abbr-form'],
                 tabindex: '-1',
                 'text-align': 'center',
+                style:'padding:0.1cm;text-align:center;',
             },
             children: [
                 this.mathlivView,
@@ -53,7 +54,12 @@ export default class MathNodeView extends View {
         });
     }    
     get_mathliv_element() {
-        const math_el = document.createElement('math-field');
+        const math_el = new MathfieldElement()//document.createElement('math-field');
+        math_el.style['minHeight']='1.5cm';
+        math_el.style['margin']='0.4cm auto';
+        math_el.style['padding']='0.2cm';
+        math_el.style['border']='solid 0.05cm';
+        math_el.style['font-size']='20px';
         math_el.innerHTML ="\\alpha"// "<math-field>\\alpha</math-field>"
         return math_el;
     }
@@ -69,7 +75,8 @@ export default class MathNodeView extends View {
         this.keystrokes.listenTo(this.element);
     }
     focus() {
-        this.childViews.first.focus();
+        // this.childViews.first.focus();
+        this.mathlivView.focus();
     }
     _createInput(label) {
         const labeledInput = new LabeledFieldView(this.locale, createLabeledInputText);
