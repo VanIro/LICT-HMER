@@ -9,6 +9,8 @@ import "./styles.css";
 
 import DrawpadCommand from "./drawpadcommand";
 
+const TESTMODE = true;
+
 class DoubleClickObserver extends DomEventObserver {
 	constructor( view ) {
 		super( view );
@@ -69,16 +71,25 @@ export default class DrawpadUI extends Plugin {
     const mathNodeView = new MathNodeView(editor.locale);
     this.listenTo(mathNodeView, "submit", () => {
       let mathliv_code = mathNodeView.mathlivView.value
-      // let strInp_code = mathNodeView.strInputView.fieldView.value
-      console.log(mathliv_code)
-      let elm = editor.model.document.selection.getSelectedElement();
-      let newSrc = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathliv_code);
+      // console.log(mathliv_code)
 
-      editor.model.change( writer => {
-        const range = editor.model.document.selection.getFirstRange();
-        const math_node = writer.createElement('math-node',{'latex_code':mathliv_code,src:newSrc});
-        editor.model.insertObject( math_node, null, range, { setSelection: 'on' }  );
-      } );
+      if(mathliv_code.length>0){
+        let elm = editor.model.document.selection.getSelectedElement();
+        let newSrc = "http://chart.apis.google.com/chart?cht=tx&chl=" + encodeURIComponent(mathliv_code);
+  
+        editor.model.change( writer => {
+          const range = editor.model.document.selection.getFirstRange();
+          const  math_node = writer.createElement('math-node',{'latex_code':mathliv_code,src:newSrc});
+          editor.model.insertObject( math_node, null, range, { setSelection: 'on' }  );
+        } );
+      }
+      else{
+        editor.model.change( writer => {
+          const range = editor.model.document.selection.getFirstRange();
+          editor.model.insertContent( writer.createText(''),range);
+        } );
+      }
+      this._hideWidgetUI();
       // console.log("mathNodeView submit!");
 
     })
@@ -107,43 +118,39 @@ export default class DrawpadUI extends Plugin {
     const editor = this.editor;
     const canvasView = new CanvasView(editor.locale);
     this.listenTo(canvasView, "submit", () => {
-            // MathJax.typeset();
-            var canvas_elm = document.getElementById('canvas-drawing_pad')
-            var image_64 = canvas_elm.toDataURL().split('base64,')[1];
-            // console.log(image_64)
+        // MathJax.typeset();
+        var canvas_elm = document.getElementById('canvas-drawing_pad')
+        var image_64 = canvas_elm.toDataURL().split('base64,')[1];
+        // console.log(image_64)
 
-            var data = {
-                img_file:image_64
-            }
-            //sending a request
+        var data = {
+            img_file:image_64
+        }
+        if(!TESTMODE)
+        //sending a request
+          fetch('http://127.0.0.1:8000/process-image',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                body: JSON.stringify(data)
 
-          // fetch('http://127.0.0.1:8000/process-image',{
-          //       method:'POST',
-          //       headers: {
-          //           'Content-Type': 'application/json'
-          //           // 'Content-Type': 'application/x-www-form-urlencoded',
-          //           },
-          //       body: JSON.stringify(data)
+            }).then((response)=>{
+              return response.json();
+            }).then((data)=>{
+              console.log(data);
+              // Change the model to insert the response.
+              //insert a math-node
 
-          //   }).then((response)=>{
-          //     return response.json();
-          //   }).then((data)=>{
-          //     console.log(data);
-          //     // Change the model to insert the response.
-          //     //insert a math-node
-          //     editor.model.change( writer => {
-          //       editor.model.insertContent( writer.createText( data['message'], { 'math-node': 'math-node' } ) );
-          //     } );
-          //     // editor.model.change(writer => {
-          //     //     editor.model.insertContent( writer.createText( data['message'], { 'math-node':true} ) );
-          //     // });
-          //     // insert plain text
-          //     // editor.model.change( writer => {
-          //     //       editor.model.insertContent( writer.createText( data['message'] ) );
-          //     // });
-          // })
-
+              editor.model.change(writer => {
+                const math_node = writer.createElement('math-node',{'latex_code':data['message'],src:'dummy'});
+                editor.model.insertObject( math_node, null, null, { setSelection: 'on' }  );
+              });
+          })
+        else{
           //for testing purposes, data is a dummy response
+
           var canvas_elm = document.getElementById('canvas-drawing_pad')
           var image_64 = canvas_elm.toDataURL().split('base64,')[1];
           // console.log(canvas_elm.toDataURL())
@@ -161,29 +168,31 @@ export default class DrawpadUI extends Plugin {
             editor.model.insertObject( math_node, null, null, { setSelection: 'on' }  );
           });
             this._hideUI();
-        })
-        this.listenTo(canvasView, 'cancel', () => {
-            var canvas_elm = document.getElementById('canvas-drawing_pad')
-            const context = canvas_elm.getContext('2d');
-            context.clearRect(0, 0, canvas_elm.width, canvas_elm.height);
-            this._hideUI();
-        })
+        }
+    })
 
-        // Hide the form view when clicking outside the balloon.
-        clickOutsideHandler({
-            emitter: canvasView,
-            activator: () => this._balloon.visibleView === canvasView,
-            contextElements: [this._balloon.view.element],
-            callback: () => this._hideUI()
-        });
+    this.listenTo(canvasView, 'cancel', () => {
+        var canvas_elm = document.getElementById('canvas-drawing_pad')
+        const context = canvas_elm.getContext('2d');
+        context.clearRect(0, 0, canvas_elm.width, canvas_elm.height);
+        this._hideUI();
+    })
 
-        canvasView.keystrokes.set('Esc', (data, cancel) => {
-            this._hideUI();
-            cancel();
-        })
+    // Hide the form view when clicking outside the balloon.
+    clickOutsideHandler({
+        emitter: canvasView,
+        activator: () => this._balloon.visibleView === canvasView,
+        contextElements: [this._balloon.view.element],
+        callback: () => this._hideUI()
+    });
 
-        return canvasView;
-    }
+    canvasView.keystrokes.set('Esc', (data, cancel) => {
+        this._hideUI();
+        cancel();
+    })
+
+    return canvasView;
+  }
   _getBalloonPositionData() {
     const view = this.editor.editing.view;
     const viewDocument = view.document;
@@ -210,14 +219,13 @@ export default class DrawpadUI extends Plugin {
     
     this.mathNodeView.strInputView.fieldView.value=latex_code
     this.mathNodeView.mathlivView.value=latex_code
-    console.log(this.mathNodeView.strInputView.fieldView.value)
     
     this.mathNodeView.mathlivView.onkeyup = (arg)=>{
-      console.log('Changed mathliv',arg,this.mathNodeView.mathlivView.value)
+      // console.log('Changed mathliv',arg,this.mathNodeView.mathlivView.value)
       this.mathNodeView.strInputView.fieldView.value=this.mathNodeView.mathlivView.value;
     };
     this.mathNodeView.strInputView.fieldView.element.onkeyup=(arg)=>{
-      console.log('Changed strInput',this.mathNodeView.strInputView.fieldView.element.value)
+      // console.log('Changed strInput',this.mathNodeView.strInputView.fieldView.element.value)
       this.mathNodeView.mathlivView.value = this.mathNodeView.strInputView.fieldView.element.value
     }
 
@@ -225,7 +233,7 @@ export default class DrawpadUI extends Plugin {
   }
   _hideWidgetUI(view) {
     
-    this.mathNodeView.element.reset();
+    // this.mathNodeView.strInputView.fieldView.element.reset();
 
     this._widgetBalloon.remove(this.mathNodeView);
 
