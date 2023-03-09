@@ -7,5 +7,5 @@ The objective is to make a drawpad in a rich text editor or easily including mat
   - `npm install`
 - Run in development mode, with hot reload
   - `npm run start:dev` or `npm run dev` 
-- Build the bundelled file
+- Build the bundled file
   - `npm run build`
