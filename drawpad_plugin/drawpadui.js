@@ -9,8 +9,12 @@ import "./styles.css";
 
 import DrawpadCommand from "./drawpadcommand";
 
+//when backend server is not active, use a dummy output as the response
+//change this to false if backend server is running
 const TESTMODE = true;
+const BACKEND_URL = 'http://127.0.0.1:8000/process-image';
 
+//Implements double click event for the editor to listen to
 class DoubleClickObserver extends DomEventObserver {
 	constructor( view ) {
 		super( view );
@@ -23,6 +27,7 @@ class DoubleClickObserver extends DomEventObserver {
 	}
 }
 
+//Implements all the ui functionalities
 export default class DrawpadUI extends Plugin {
   static get requires() {
     return [ContextualBalloon];
@@ -36,6 +41,7 @@ export default class DrawpadUI extends Plugin {
     this._widgetBalloon = this.editor.plugins.get(ContextualBalloon);
     this.mathNodeView = this._createMathNodeView();
 
+  //Add drawpad button to the toolbar
     editor.ui.componentFactory.add("drawpad", () => {
       const button = new ButtonView();
       button.label = "drawpad";
@@ -52,9 +58,10 @@ export default class DrawpadUI extends Plugin {
 
     const view = this.editor.editing.view;
     const viewDocument = view.document;
-
+    //add double click event to the list of events observed by the editor for all components
     view.addObserver( DoubleClickObserver );
 
+    //if math-node element triggers a double click event, show the ui for editing the equation
     this.editor.listenTo( viewDocument, 'dblclick', ( evt, data ) => {
         const modelElement = this.editor.editing.mapper.toModelElement( data.target);
         // console.log(data,data.target)
@@ -66,6 +73,7 @@ export default class DrawpadUI extends Plugin {
 
   }
 
+   //implements the event handlers like submit, ESC key, clicking outside the equation editing ui
   _createMathNodeView() {
     const editor = this.editor;
     const mathNodeView = new MathNodeView(editor.locale);
@@ -114,6 +122,7 @@ export default class DrawpadUI extends Plugin {
     return mathNodeView;
   }
 
+  //implements event handlers like submit, ESC key, clicking outside the drawpad ui
   _createCanvasView() {
     const editor = this.editor;
     const canvasView = new CanvasView(editor.locale);
@@ -128,7 +137,7 @@ export default class DrawpadUI extends Plugin {
         }
         if(!TESTMODE)
         //sending a request
-          fetch('http://127.0.0.1:8000/process-image',{
+          fetch(BACKEND_URL,{
                 method:'POST',
                 headers: {
                     'Content-Type': 'application/json'
