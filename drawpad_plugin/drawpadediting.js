@@ -3,7 +3,7 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { toWidget, toWidgetEditable } from '@ckeditor/ckeditor5-widget/src/utils';
 import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 
-
+// Implements the internal representation of mathnode(that represents the editable equations)
 export default class DrawpadEditing extends Plugin {
     static get requires() {
         return [ Widget ];
