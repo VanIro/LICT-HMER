@@ -19,4 +19,4 @@ The objective is to make a drawpad integrated in a rich text editor for easily i
 - `drawpadui.js` uses DrawpadView and MathnodeView to implement all ui features and functionalities.
 - `drawpad.js` combines all the plugin components together.
 
-= `app.js` integrates the drawpad plugin into ckeditor5.
++ `app.js` integrates the drawpad plugin into ckeditor5.
