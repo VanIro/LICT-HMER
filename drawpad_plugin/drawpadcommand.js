@@ -6,11 +6,6 @@ export default class DrawpadCommand extends Command {
         const selection = editor.model.document.selection;
 
         editor.model.change( writer => {
-            // Create a <placeholder> element with the "name" attribute (and all the selection attributes)...
-            // const placeholder = writer.createElement( 'placeholder', {
-            //     ...Object.fromEntries( selection.getAttributes() ),
-            //     name: value
-            // } );
             const math_node = writer.createElement('math-node', {
                     ...Object.fromEntries( selection.getAttributes() ),
             });
